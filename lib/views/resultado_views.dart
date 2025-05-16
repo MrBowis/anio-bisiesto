@@ -1,22 +1,40 @@
 import 'package:flutter/material.dart';
+import '../controllers/anio_controller.dart';
 
-class ResultadoViews extends StatelessWidget {
-  const ResultadoViews({super.key});
+class ResultadoView extends StatelessWidget{
+  final controller= AnioController();
 
   @override
   Widget build(BuildContext context) {
-    final bool esBisiesto = ModalRoute.of(context)?.settings.arguments as bool;
+    final orientacion =  MediaQuery.of(context).orientation;
+    final lista = controller.obtenerUltimos(1);//
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Resultado'),
-      ),
-      body: Center(
-        child: Text(
-          esBisiesto ? 'El año es bisiesto' : 'El año no es bisiesto',
-          style: const TextStyle(fontSize: 24),
-        ),
+
+
+      appBar: AppBar(title: Text("Lista de anios bisiestos"),),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: ListView.builder(
+          itemCount: lista.length,
+            itemBuilder:(context, index){
+            final anio = lista[index];
+
+            return Card(
+              child: ListTile(
+                title: Text(anio.toString()),
+                subtitle: Text("El anio $anio es bisiesto"),
+                leading: Icon(Icons.calendar_today),
+                trailing: Icon(Icons.check_circle),
+                onTap: () {
+                  // Accion al hacer clic en el elemento
+                  print("Anio seleccionado: $anio");
+                },                
+              ),
+            );
+            }),
       ),
     );
   }
+
 }

@@ -1,42 +1,63 @@
 import 'package:flutter/material.dart';
 import '../controllers/anio_controller.dart';
 
-class VerificarViews extends StatelessWidget {
+class VerficarView extends StatelessWidget {
 
-  // Diseño de la vista
+  //declaro y mapeo objetos
+  TextEditingController _anioC = TextEditingController();
+  //instanciar
+  AnioController controller = AnioController();
+
+  //diseño
   @override
   Widget build(BuildContext context) {
-    final anioController = AnioController();
-    final TextEditingController anioControllerText = TextEditingController();
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Verificar Año Bisiesto'),
-      ),
+       appBar: AppBar(title: Text('Vereficar el año bisiesto'),),
+
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16),
+
         child: Column(
           children: [
             TextField(
-              controller: anioControllerText,
-              decoration: const InputDecoration(
-                labelText: 'Ingrese un año',
-                border: OutlineInputBorder(),
-              ),
+              controller: _anioC,
               keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: "Ingrese un año"),
+
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20,),
             ElevatedButton(
-              onPressed: () {
-                int anio = int.parse(anioControllerText.text);
-                bool esBisiesto = anioController.verificarBisiesto(anio);
-                Navigator.pushNamed(context, '/resultado', arguments: esBisiesto);
+              onPressed: (){
+                final anio= int.parse(_anioC.text);
+                if(anio == null){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Año no valido')),
+                  );
+                  return;
+                }
+
+                final esBisiesto= controller.verificarBisiesto(anio);
+                if(!esBisiesto){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('El año $anio No es bisiesto')),
+                  );
+                  return;
+                }
+
+                //pasando argumentos
+                Navigator.pushNamed(
+                  context,'/resultado',
+                arguments: {'anio': anio},
+                );
               },
-              child: const Text('Verificar'),
-            ),
+              child: Text('Verificar'),
+
+            )
           ],
         ),
       ),
     );
   }
+
+
 }
