@@ -1,24 +1,19 @@
 import '../models/anio_model.dart';
 
 class AnioController {
-  //verificar si es bisiesto
-
-bool verificarBisiesto(int anio){
-  return AnioModel(anio).esBisiesto();
-}
-//obtener10ultimos años
-
-List <int> obtenerUltimos(int desde){
-  List<int> lista = [];//crear lista vacia
-
-  int actual = desde;
-  while(lista.length < 10){
-    if(verificarBisiesto(actual))
-      lista.add(actual);
-    actual --;
-
+  bool verificarBisiesto(int anio) {
+    return AnioModel(anio).esBisiesto();
   }
-  return lista;
 
-}
+  List<int> obtenerUltimosBisiestos(int inicio, {int cantidad = 10}) {
+    List<int> listaBisiestos = [];
+    int actual = inicio - 1; // Empezamos un año antes del inicio
+    while (listaBisiestos.length < cantidad) {
+      if (verificarBisiesto(actual)) {
+        listaBisiestos.add(actual);
+      }
+      actual--;
+    }
+    return listaBisiestos;
+  }
 }

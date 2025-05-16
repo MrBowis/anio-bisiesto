@@ -1,40 +1,35 @@
-import 'package:flutter/material.dart';
-import '../controllers/anio_controller.dart';
+  import 'package:flutter/material.dart';
+  import '../controllers/anio_controller.dart';
+  import '../themes/bisiesto_theme.dart'; // Importa el tema específico
 
-class ResultadoView extends StatelessWidget{
-  final controller= AnioController();
+  class ResultadoView extends StatelessWidget{
+    final controller= AnioController();
 
-  @override
-  Widget build(BuildContext context) {
-    final orientacion =  MediaQuery.of(context).orientation;
-    final lista = controller.obtenerUltimos(1);//
+    @override
+    Widget build(BuildContext context) {
+      final List<int> ultimosBisiestos =
+          ModalRoute.of(context)?.settings.arguments as List<int>;
 
-    return Scaffold(
-
-
-      appBar: AppBar(title: Text("Lista de anios bisiestos"),),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: ListView.builder(
-          itemCount: lista.length,
-            itemBuilder:(context, index){
-            final anio = lista[index];
-
-            return Card(
-              child: ListTile(
-                title: Text(anio.toString()),
-                subtitle: Text("El anio $anio es bisiesto"),
-                leading: Icon(Icons.calendar_today),
-                trailing: Icon(Icons.check_circle),
-                onTap: () {
-                  // Accion al hacer clic en el elemento
-                  print("Anio seleccionado: $anio");
-                },                
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Últimos Años Bisiestos'),
+        ),
+        body: ultimosBisiestos.isEmpty
+            ? const Center(
+                child: Text('No se encontraron años bisiestos.'),
+              )
+            : ListView.builder(
+                itemCount: ultimosBisiestos.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(
+                      ultimosBisiestos[index].toString(),
+                      style: BisiestoTheme.bisiestoTextStyle, // Aplica el estilo aquí
+                    ),
+                  );
+                },
               ),
-            );
-            }),
-      ),
-    );
-  }
+      );
+    }
 
-}
+  }
